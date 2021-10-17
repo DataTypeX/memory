@@ -5,9 +5,9 @@ import time
 import os
 logger = logging.getLogger("main")
 logger.setLevel(logging.DEBUG)
-# logger的setLevel是最根本的
+# logger（setLevel）
 fh = logging.FileHandler(time.strftime("%Y%m%d%H%M%S", time.localtime(time.time())) + '.txt')
-# 如果没有这个，就不会输出到文件
+# 输出到文件
 fh.setLevel(logging.INFO)
 ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
@@ -17,12 +17,12 @@ fh.setFormatter(formatter)
 logger.addHandler(ch)
 logger.addHandler(fh)
 
-package='com.hl.relic'#填写测试包名
+package='com.***.***#应用名称
 
 def getmem(package):
     cmd = r'adb shell dumpsys meminfo '+package+' | findstr "TOTAL"'  # % apk_file
     pr = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
-    pr.wait()  # 不会马上返回输出的命令，需要等待
+    pr.wait()  # 等待
     out = pr.stdout.readlines()  # out = pr.stdout.read().decode("UTF-8")
     str_out=map(str,out)
     number=[]
@@ -37,7 +37,7 @@ def getCpu(package):
         if re.findall(name,line):
             cuplist = line.split(" ")
             if cuplist[-1].strip() == package:
-                while '' in cuplist:       # 将list中的空元素删除
+                while '' in cuplist:       # 将元素删除
                     cuplist.remove('')
                 cpu_apk=float(cuplist[2].strip('%'))
                 return str(cpu_apk)+'%'  #去掉百分号，返回一个float
